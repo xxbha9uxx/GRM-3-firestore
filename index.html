@@ -13,7 +13,6 @@
     <!-- Firebase SDK -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-storage-compat.min.js"></script>
     <style>
         /* Custom styles for the page */
         body {
@@ -166,15 +165,6 @@
                             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Grievance Description</label>
                             <textarea id="description" name="description" rows="4" required placeholder="Please describe your grievance in detail..." class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                         </div>
-                        <!-- File Upload -->
-                        <div class="md:col-span-2">
-                            <label for="pdf-upload" class="block text-sm font-medium text-gray-700 mb-1">Upload Supporting Document (PDF only, max 1MB) *</label>
-                            <div class="relative">
-                                <input type="file" id="pdf-upload" name="pdf-upload" accept=".pdf" required class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
-                                <p class="mt-1 text-sm text-gray-500">Please upload a PDF file (maximum size: 1MB)</p>
-                            </div>
-                            <div id="file-error" class="hidden mt-2 text-sm text-red-600"></div>
-                        </div>
                         <!-- Confirmation Checkbox -->
                         <div class="md:col-span-2 flex items-start">
                             <div class="flex items-center h-5">
@@ -263,14 +253,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Initialize Firebase Storage
-        const storage = firebase.storage();
-        const storageRef = storage.ref();
-        
-        // File validation
-        const fileInput = document.getElementById('pdf-upload');
-        const fileError = document.getElementById('file-error');
-
         // Collection name for grievances
         const GRIEVANCES_COLLECTION = 'grievances';
 
@@ -316,51 +298,6 @@
                    firebaseConfig.projectId !== "YOUR_PROJECT_ID";
         }
 
-
-         /**
-         * Validates the uploaded PDF file
-         * @param {File} file - The uploaded file
-         * @returns {boolean} True if valid, false otherwise
-         */
-        function validatePDFFile(file) {
-            fileError.classList.add('hidden');
-            
-            if (!file) {
-                fileError.textContent = 'Please select a PDF file.';
-                fileError.classList.remove('hidden');
-                return false;
-            }
-            
-            // Check file type
-            if (file.type !== 'application/pdf') {
-                fileError.textContent = 'Please select a PDF file only.';
-                fileError.classList.remove('hidden');
-                return false;
-            }
-            
-            // Check file size (1MB = 1024 * 1024 bytes)
-            if (file.size > 1024 * 1024) {
-                fileError.textContent = 'File size must be less than 1MB.';
-                fileError.classList.remove('hidden');
-                return false;
-            }
-            
-            return true;
-        }
-
-        // Add file validation on file selection
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                validatePDFFile(file);
-            }
-        });
-        
-        /**
-         * Handles the submission of the grievance form.
-         * @param {Event} e - The form submission event.
-         */
-        
         /**
          * Handles the submission of the grievance form.
          * @param {Event} e - The form submission event.
@@ -373,51 +310,38 @@
                 submissionError.classList.remove('hidden');
                 return;
             }
-        
-            // Validate PDF file
-            const pdfFile = fileInput.files[0];
-            if (!validatePDFFile(pdfFile)) {
-                return;
-            }
-        
+
             // Show loader and disable button
             submitLoader.classList.remove('hidden');
             submitBtn.disabled = true;
             submissionResult.classList.add('hidden');
             submissionError.classList.add('hidden');
-        
+
             const formData = new FormData(grievanceForm);
             const grievanceId = generateGrievanceId();
             const timestamp = new Date();
-        
+
+            const grievanceData = {
+                grievanceId: grievanceId,
+                name: formData.get('name'),
+                email: formData.get('email'),
+                mobile: formData.get('mobile'),
+                rollNumber: formData.get('roll-number'),
+                course: formData.get('course'),
+                year: formData.get('year'),
+                firstGrievance: formData.get('first-grievance'),
+                grievanceType: formData.get('grievance-type'),
+                description: formData.get('description'),
+                status: 'Pending',
+                adminResponse: '',
+                timestamp: timestamp,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
             try {
-                // Upload PDF file to Firebase Storage
-                const fileRef = storageRef.child(`grievances/${grievanceId}/${pdfFile.name}`);
-                const uploadTask = await fileRef.put(pdfFile);
-                const downloadURL = await uploadTask.ref.getDownloadURL();
-        
-                const grievanceData = {
-                    grievanceId: grievanceId,
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    mobile: formData.get('mobile'),
-                    rollNumber: formData.get('roll-number'),
-                    course: formData.get('course'),
-                    year: formData.get('year'),
-                    firstGrievance: formData.get('first-grievance'),
-                    grievanceType: formData.get('grievance-type'),
-                    description: formData.get('description'),
-                    pdfFileName: pdfFile.name,
-                    pdfDownloadURL: downloadURL,
-                    status: 'Pending',
-                    adminResponse: '',
-                    timestamp: timestamp,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
-        
                 // Add document to Firestore with custom ID
                 await db.collection(GRIEVANCES_COLLECTION).doc(grievanceId).set(grievanceData);
-        
+
                 resultMessage.textContent = 'Your grievance has been submitted successfully! Your Grievance ID is:';
                 grievanceIdDisplay.textContent = grievanceId;
                 submissionResult.classList.remove('hidden');
@@ -433,6 +357,7 @@
                 submitBtn.disabled = false;
             }
         });
+
         /**
          * Handles the "Copy ID" button click. Uses a fallback method for broader browser compatibility.
          */
