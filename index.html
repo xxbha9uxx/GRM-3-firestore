@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grievance Redressal Portal</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a professional look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the page */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #f3e8ff, #e9d5ff); /* Light purple gradient */
+        }
+        /* Custom loader animation */
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Style for status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        /* Adding focus styles for better accessibility */
+        .form-input {
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus-within {
+             box-shadow: 0 0 0 2px #a78bfa; /* Violet ring on focus */
+             border-color: #a78bfa;
+        }
+        .form-input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* Gray-400 */
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-purple-700">Grievance Redressal Portal</h1>
+            <p class="text-md text-gray-600 mt-2">Your voice matters. Submit and track your grievances with ease.</p>
+        </header>
+
+        <main>
+            <!-- Grievance Submission Form Section -->
+            <section id="submission-section" class="bg-white p-6 md:p-8 rounded-xl shadow-2xl mb-12 transform hover:scale-[1.01] transition-transform duration-300">
+                <h2 class="text-2xl font-bold mb-6 border-b pb-3 flex items-center text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Submit a New Grievance
+                </h2>
+                <form id="grievance-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Name -->
+                        <div class="relative">
+                            <span class="form-input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                            </span>
+                            <input type="text" id="name" name="name" placeholder="Full Name" required class="form-input w-full pl-10 p-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <!-- Email -->
+                        <div class="relative">
+                             <span class="form-input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                            </span>
+                            <input type="email" id="email" name="email" placeholder="Email Address" required class="form-input w-full pl-10 p-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <!-- Mobile Number -->
+                        <div class="relative">
+                             <span class="form-input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
+                            </span>
+                            <input type="tel" id="mobile" name="mobile" placeholder="10-digit Mobile Number" required pattern="\d{10}" title="Please enter a 10-digit mobile number" class="form-input w-full pl-10 p-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <!-- College Roll Number -->
+                        <div class="relative">
+                            <span class="form-input-icon">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM4 8h5v2H4V8z" clip-rule="evenodd" /></svg>
+                            </span>
+                            <input type="text" id="roll-number" name="roll-number" placeholder="7-digit Roll Number" required pattern="\d{7}" title="Please enter a 7-digit roll number" class="form-input w-full pl-10 p-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <!-- Course -->
+                        <select id="course" name="course" required class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                            <option value="" disabled selected>Select your course</option>
+                            <option>B.A. (Hons.) Economics</option>
+                            <option>B.A. (Hons.) English</option>
+                            <option>B.A. (Hons.) History</option>
+                            <option>B.A. (Hons.) Political Science</option>
+                            <option>B.A. Programme</option>
+                            <option>B.Com (Hons.)</option>
+                            <option>B.Com Programme</option>
+                            <option>B.Sc. (Hons.) Botany</option>
+                            <option>B.Sc. (Hons.) Chemistry</option>
+                            <option>B.Sc. (Hons.) Computer Science</option>
+                            <option>B.Sc. (Hons.) Mathematics</option>
+                            <option>B.Sc. (Hons.) Physics</option>
+                            <option>B.Sc. (Hons.) Zoology</option>
+                            <option>B.Sc. Life Sciences</option>
+                            <option>B.Sc. Physical Science with Chemistry</option>
+                            <option>B.Sc. Physical Science with Computer Science</option>
+                            <option>Other</option>
+                        </select>
+                        <!-- Year -->
+                        <select id="year" name="year" required class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                            <option value="" disabled selected>Select Year</option>
+                            <option value="I">I</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                        </select>
+                        <!-- First Grievance? -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Is this your first grievance?</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="flex items-center"><input type="radio" name="first-grievance" value="Yes" required class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"> <span class="ml-2">Yes</span></label>
+                                <label class="flex items-center"><input type="radio" name="first-grievance" value="No" class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"> <span class="ml-2">No</span></label>
+                            </div>
+                        </div>
+                        <!-- Type of Grievance -->
+                        <div class="md:col-span-2">
+                            <label for="grievance-type" class="block text-sm font-medium text-gray-700 mb-1">Type of Grievance</label>
+                            <select id="grievance-type" name="grievance-type" required class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                                <option value="" disabled selected>Select Type</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Canteen">Canteen</option>
+                                <option value="Infrastructure">Infrastructure</option>
+                                <option value="Academics">Academics</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Hostel">Hostel</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <!-- Grievance Description -->
+                        <div class="md:col-span-2">
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Grievance Description</label>
+                            <textarea id="description" name="description" rows="4" required placeholder="Please describe your grievance in detail..." class="form-input w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                        </div>
+                        <!-- Confirmation Checkbox -->
+                        <div class="md:col-span-2 flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="confirmation" name="confirmation" type="checkbox" required class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="confirmation" class="font-medium text-gray-700">I confirm all the information given by me is correct.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="mt-8 text-right">
+                        <button type="submit" id="submit-btn" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all transform hover:scale-105">
+                            Submit Grievance
+                            <span id="submit-loader" class="hidden loader"></span>
+                        </button>
+                    </div>
+                </form>
+                <!-- Submission Result Display -->
+                <div id="submission-result" class="hidden mt-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded-md">
+                    <p id="result-message"></p>
+                    <div class="mt-2 flex items-center">
+                        <span id="grievance-id-display" class="font-mono text-lg font-bold mr-4"></span>
+                        <button id="copy-id-btn" class="px-3 py-1 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none">Copy ID</button>
+                    </div>
+                </div>
+                 <!-- Submission Error Display -->
+                <div id="submission-error" class="hidden mt-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md"></div>
+            </section>
+
+            <!-- Grievance Status Tracker Section -->
+            <section id="tracker-section" class="bg-white p-6 md:p-8 rounded-xl shadow-2xl transform hover:scale-[1.01] transition-transform duration-300">
+                <h2 class="text-2xl font-bold mb-6 border-b pb-3 flex items-center text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    Track Your Grievance
+                </h2>
+                <form id="tracker-form" class="flex flex-col sm:flex-row items-center gap-4">
+                    <label for="track-id" class="sr-only">Grievance ID</label>
+                    <input type="text" id="track-id" name="track-id" placeholder="Enter your Grievance ID (e.g., GRV-XXXXX)" required class="form-input w-full flex-grow p-3 border border-gray-300 rounded-md shadow-sm">
+                    <button type="submit" id="track-btn" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-all transform hover:scale-105">
+                        Track Status
+                        <span id="track-loader" class="hidden loader"></span>
+                    </button>
+                </form>
+                <!-- Tracker Result Display -->
+                <div id="tracker-result" class="hidden mt-8 border-t pt-6 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">Status</h4>
+                        <p id="status-display" class="status-badge mt-1"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">Grievance Description</h4>
+                        <p id="description-display" class="mt-1 p-3 bg-gray-50 rounded-md border"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">Submission Date & Time</h4>
+                        <p id="timestamp-display" class="mt-1 text-gray-800"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">Response from Admin</h4>
+                        <p id="response-display" class="mt-1 p-3 bg-purple-50 rounded-md border border-purple-200"></p>
+                    </div>
+                </div>
+                <!-- Tracker Error Display -->
+                <div id="tracker-error" class="hidden mt-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md"></div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        // IMPORTANT: Paste your Google Apps Script Web App URL here.
+        const googleAppScriptUrl = 'https://script.google.com/macros/s/AKfycbxycNVlL-c3ycKBJBoxhat-03y3EonJUJfqpaEgeIUlVSNIpLoVLsNOhHVFIhC6EeoV/exec';
+
+        // --- DOM Element References ---
+        const grievanceForm = document.getElementById('grievance-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitLoader = document.getElementById('submit-loader');
+        const submissionResult = document.getElementById('submission-result');
+        const submissionError = document.getElementById('submission-error');
+        const resultMessage = document.getElementById('result-message');
+        const grievanceIdDisplay = document.getElementById('grievance-id-display');
+        const copyIdBtn = document.getElementById('copy-id-btn');
+
+        const trackerForm = document.getElementById('tracker-form');
+        const trackBtn = document.getElementById('track-btn');
+        const trackLoader = document.getElementById('track-loader');
+        const trackerResult = document.getElementById('tracker-result');
+        const trackerError = document.getElementById('tracker-error');
+        const statusDisplay = document.getElementById('status-display');
+        const descriptionDisplay = document.getElementById('description-display');
+        const timestampDisplay = document.getElementById('timestamp-display');
+        const responseDisplay = document.getElementById('response-display');
+
+        /**
+         * Generates a unique grievance ID in the format GRV-XXXXX.
+         * @returns {string} The generated grievance ID.
+         */
+        function generateGrievanceId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let randomStr = '';
+            for (let i = 0; i < 5; i++) {
+                randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return `GRV-${randomStr}`;
+        }
+
+        /**
+         * Handles the submission of the grievance form.
+         * @param {Event} e - The form submission event.
+         */
+        
+        grievanceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            submitLoader.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submissionResult.classList.add('hidden');
+            submissionError.classList.add('hidden');
+        
+            const formData = new FormData(grievanceForm);
+            const grievanceId = generateGrievanceId();
+            const grievanceData = {
+                grievanceId: grievanceId,
+                name: formData.get('name'),
+                email: formData.get('email'),
+                mobile: formData.get('mobile'),
+                rollNumber: formData.get('roll-number'),
+                course: formData.get('course'),
+                year: formData.get('year'),
+                firstGrievance: formData.get('first-grievance'),
+                grievanceType: formData.get('grievance-type'),
+                description: formData.get('description'),
+                status: 'Pending',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                adminResponse: ''
+            };
+        
+            try {
+                await db.collection('grievances').doc(grievanceId).set(grievanceData);
+        
+                resultMessage.textContent = 'Your grievance has been submitted successfully! Your Grievance ID is:';
+                grievanceIdDisplay.textContent = grievanceId;
+                submissionResult.classList.remove('hidden');
+                grievanceForm.reset();
+            } catch (error) {
+                submissionError.textContent = `Submission failed: ${error.message}`;
+                submissionError.classList.remove('hidden');
+            } finally {
+                submitLoader.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+        /**
+         * Handles the "Copy ID" button click. Uses a fallback method for broader browser compatibility.
+         */
+        copyIdBtn.addEventListener('click', () => {
+            const idToCopy = grievanceIdDisplay.textContent;
+            
+            const textArea = document.createElement('textarea');
+            textArea.value = idToCopy;
+            textArea.setAttribute('readonly', '');
+            textArea.style.position = 'absolute';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                copyIdBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyIdBtn.textContent = 'Copy ID';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy ID: ', err);
+                copyIdBtn.textContent = 'Error';
+                 setTimeout(() => {
+                    copyIdBtn.textContent = 'Copy ID';
+                }, 2000);
+            } finally {
+                 document.body.removeChild(textArea);
+            }
+        });
+
+        /**
+         * Handles the submission of the grievance tracker form.
+         * @param {Event} e - The form submission event.
+         */
+        trackerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            trackLoader.classList.remove('hidden');
+            trackBtn.disabled = true;
+            trackerResult.classList.add('hidden');
+            trackerError.classList.add('hidden');
+        
+            const grievanceId = document.getElementById('track-id').value.trim();
+        
+            try {
+                const doc = await db.collection('grievances').doc(grievanceId).get();
+        
+                if (!doc.exists) {
+                    throw new Error('Grievance ID not found.');
+                }
+        
+                displayTrackingResults(doc.data());
+            } catch (error) {
+                trackerError.textContent = `Error: ${error.message}`;
+                trackerError.classList.remove('hidden');
+            } finally {
+                trackLoader.classList.add('hidden');
+                trackBtn.disabled = false;
+            }
+        });
+
+        /**
+         * Displays the fetched tracking results on the page.
+         * @param {object} data - The grievance data object from the backend.
+         */
+        function displayTrackingResults(data) {
+            const status = data.Status || 'Pending';
+            statusDisplay.textContent = status;
+            
+            statusDisplay.className = 'status-badge'; // Reset classes
+            switch (status.toLowerCase()) {
+                case 'in review':
+                    statusDisplay.classList.add('bg-blue-200', 'text-blue-800');
+                    break;
+                case 'on hold':
+                    statusDisplay.classList.add('bg-yellow-200', 'text-yellow-800');
+                    break;
+                case 'resolved':
+                    statusDisplay.classList.add('bg-green-200', 'text-green-800');
+                    break;
+                case 'dismissed':
+                    statusDisplay.classList.add('bg-red-200', 'text-red-800');
+                    break;
+                case 'pending':
+                default:
+                    statusDisplay.classList.add('bg-gray-200', 'text-gray-800');
+                    break;
+            }
+
+            descriptionDisplay.textContent = data.Description || 'N/A';
+            timestampDisplay.textContent = data.Timestamp ? new Date(data.Timestamp).toLocaleString() : 'N/A';
+            responseDisplay.textContent = data.AdminResponse || 'No response from the admin yet.';
+            
+            trackerResult.classList.remove('hidden');
+        }
+      <!-- Firebase App (Core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // Replace with your actual Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyA5f1Un3BGVYT4ucXUzeMpgGN2sQ1LaKO8",
+    authDomain: "grm-3-firestore.firebaseapp.com",
+    projectId: "grm-3-firestore",
+    storageBucket: "grm-3-firestore.firebasestorage.app",
+    messagingSenderId: "101259019493",
+    appId: "1:101259019493:web:eaf4aeca416cb7cb57400c"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+    </script>
+</body>
+</html>
